@@ -1,0 +1,20 @@
+.SignIn_Form{
+  &__Close{
+    margin-left: 90%;
+    cursor: pointer;
+    :hover{
+      color: rgb(180, 33, 33);
+    }
+  } 
+  &__Buttons{
+    text-align: center;
+    margin: 30px auto 10px;
+  }
+  &__Header{
+    text-align: center;
+    margin-top: 0;
+  }
+  &__ErrorMessage{
+    color:rgb(145, 16, 16);
+  }
+}

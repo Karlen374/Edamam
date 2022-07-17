@@ -1,0 +1,13 @@
+.AppHeader{
+  padding:20px 0;
+  background-color: #26395d;
+  a{
+    text-decoration: none;
+  }
+  &_Button{
+    color:#fff;
+  }
+  &_Error{
+    margin: 10px;
+  }
+}
