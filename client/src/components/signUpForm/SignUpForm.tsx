@@ -1,9 +1,13 @@
 import Button from '@mui/material/Button';
 import { Grid, TextField } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch } from 'src/hooks/hooks';
-import { openSignInModal } from 'src/store/slices/authorizationSlice';
-import styles from './SignUp.module.scss';
+import { closeSignUpModal, openSignInModal, signUp } from 'src/store/slices/authorizationSlice';
+import styles from './SignUpForm.module.scss';
 
 type FormData = {
   userName:string;
@@ -14,7 +18,7 @@ type FormData = {
   password:string;
 };
 
-const SignUp = () => {
+const SignUpForm = () => {
   const {
     register,
     formState: { errors },
@@ -22,11 +26,12 @@ const SignUp = () => {
     reset,
   } = useForm<FormData>({ mode: 'onBlur' });
   const dispatch = useAppDispatch();
-  const signUpUser = () => {
-    console.log('sign Up');
+  const signUpUser = (formState:FormData) => {
+    dispatch(signUp(formState));
+    dispatch(closeSignUpModal());
     reset();
   };
-  // console.log(errors);
+
   return (
     <form onSubmit={handleSubmit(signUpUser)}>
       <Grid container spacing={2}>
@@ -63,17 +68,23 @@ const SignUp = () => {
           )}
         </Grid>
         <Grid item lg={12} md={12} sm={12} xs={12}>
-          <select {...register('userGender', {
-            required: 'This field is required',
-          })}
-          >
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-          {errors.userGender?.message && (
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="demo-simple-select-standard-label">Gender</InputLabel>
+            <Select
+              labelId="demo-select-small"
+              id="demo-select-small"
+              label="Gender"
+              {...register('userGender', {
+                required: 'This field is required',
+              })}
+            >
+              <MenuItem value="Male">Male</MenuItem>
+              <MenuItem value="Female">Female</MenuItem>
+            </Select>
+            {errors.userGender?.message && (
             <div className={styles.SignUp_Form__ErrorMessage}>{errors.userGender?.message}</div>
-          )}
+            )}
+          </FormControl>
         </Grid>
         <Grid item lg={12} md={12} sm={12} xs={12}>
           <TextField
@@ -113,7 +124,7 @@ const SignUp = () => {
             {...register('password', {
               required: 'This field is required',
               minLength: {
-                value: 5,
+                value: 3,
                 message: 'Password is too short',
               },
             })}
@@ -134,4 +145,4 @@ const SignUp = () => {
     </form>
   );
 };
-export default SignUp;
+export default SignUpForm;

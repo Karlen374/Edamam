@@ -1,11 +1,11 @@
 import { Grid, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
-import { openSignUpModal } from 'src/store/slices/authorizationSlice';
+import { closeSignInModal, openSignUpModal, signIn } from 'src/store/slices/authorizationSlice';
 import { useAppDispatch } from 'src/hooks/hooks';
-import styles from './signIn.module.scss';
+import styles from './signInForm.module.scss';
 
-const SignIn = () => {
+const SignInForm = () => {
 type FormData = {
   email: string;
   password: string;
@@ -17,12 +17,13 @@ const {
   reset,
 } = useForm<FormData>({ mode: 'onBlur' });
 const dispatch = useAppDispatch();
-const signIn = () => {
-  console.log('signIn');
+const signInUser = (formState:FormData) => {
+  dispatch(signIn(formState));
+  dispatch(closeSignInModal());
   reset();
 };
 return (
-  <form onSubmit={handleSubmit(signIn)}>
+  <form onSubmit={handleSubmit(signInUser)}>
     <Grid container spacing={2}>
       <Grid item lg={12} md={12} sm={12} xs={12}>
         <TextField
@@ -50,7 +51,7 @@ return (
           {...register('password', {
             required: 'Это поле обязательное',
             minLength: {
-              value: 5,
+              value: 3,
               message: 'Пароль слишком короткий',
             },
           })}
@@ -71,4 +72,4 @@ return (
   </form>
 );
 };
-export default SignIn;
+export default SignInForm;

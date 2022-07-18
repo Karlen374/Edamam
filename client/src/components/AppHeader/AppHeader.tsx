@@ -1,23 +1,18 @@
-import Button from '@mui/material/Button';
-import { useAppDispatch, useAppSelector } from 'src/hooks/hooks';
-import { openSignUpModal } from 'src/store/slices/authorizationSlice';
-import Modal from 'src/components/modal/modal';
-import SignUp from 'src/components/signUp/SignUp';
-import SignIn from 'src/components/signIn/signIn';
+import { useEffect } from 'react';
+import { useAppDispatch } from 'src/hooks/hooks';
 import styles from './AppHeader.module.scss';
+import AuthorizationButton from './AuthorizationButton';
+import AuthorizationModals from './AuthorizationModals';
 
 const AppHeader = () => {
   const dispatch = useAppDispatch();
-  const { signUpModal, signInModal } = useAppSelector((store) => store.authorization);
+  useEffect(() => {
+    // getRegisteredUserData
+  }, []);
   return (
     <div className={styles.AppHeader}>
-      <Button onClick={() => dispatch(openSignUpModal())} variant="outlined" color="success">Sign up</Button>
-      <Modal active={signUpModal}>
-        <SignUp />
-      </Modal>
-      <Modal active={signInModal}>
-        <SignIn />
-      </Modal>
+      <AuthorizationButton />
+      <AuthorizationModals />
     </div>
   );
 };

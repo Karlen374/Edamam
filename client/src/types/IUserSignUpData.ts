@@ -1,11 +1,8 @@
-export interface IUser {
+export interface IUserSignUpData {
   userName: string;
   userAge: number;
   userCity: string;
   userGender: string;
   email: string;
-  _id: string;
-  trainer?: string[];
-  userRole: string;
-  token: string;
+  password:string;
 }
