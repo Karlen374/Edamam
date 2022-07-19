@@ -4,10 +4,22 @@
   a{
     text-decoration: none;
   }
+  &_Chip:hover{
+    color:rgb(51, 105, 51);
+    background-color: #fff;
+    border:1px solid rgb(51, 105, 51);
+    cursor:pointer;
+    & path{
+      color:rgb(51, 105, 51)
+    }
+  }
   &_Button{
     color:#fff;
   }
   &_Error{
     margin: 10px;
+  }
+  path{
+    color:#fff;
   }
 }

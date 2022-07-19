@@ -4,17 +4,15 @@ import { IUser } from 'src/types/IUser';
 import { IUserSignInData } from 'src/types/IUserSignInData';
 import { IUserSignUpData } from 'src/types/IUserSignUpData';
 
-interface AuthorizationState {
-  signUpModal:boolean;
-  signInModal:boolean;
-  registeredUserData:IUser | null;
-  alertMessage:string
+interface FoodState {
+  loading: boolean;
+  alertMessage: string;
+  foodsData: 
+  favoriteFoods:
 }
 
-const initialState:AuthorizationState = {
-  signUpModal: false,
-  signInModal: false,
-  registeredUserData: null,
+const initialState:FoodState = {
+  loading: false;
   alertMessage: '',
 };
 

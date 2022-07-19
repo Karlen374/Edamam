@@ -1,6 +1,7 @@
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { grey } from '@mui/material/colors';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAppDispatch, useAppSelector } from 'src/hooks/hooks';
@@ -16,7 +17,9 @@ const AuthorizationButton = () => {
       <>
         <Link to="/userProfile">
           <Chip
+            className={styles.AppHeader_Chip}
             sx={{ color: grey[50] }}
+            icon={<SettingsIcon />}
             variant="outlined"
             label={registeredUserData.userName}
           />

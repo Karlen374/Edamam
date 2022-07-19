@@ -5,7 +5,7 @@ export interface IUser {
   userGender: string;
   email: string;
   _id: string;
-  trainer?: string[];
+  trainerId: string;
   userRole: string;
   token: string;
 }

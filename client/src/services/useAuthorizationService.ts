@@ -12,7 +12,7 @@ const useAuthorizationServices = () => {
   };
 
   const signUpUser = async (data:IUserSignUpData) => {
-    const res = await request(`${_apiBase}/signUp`, 'POST', JSON.stringify(data));
+    const res = await request(`${_apiBase}/signUp`, 'POST', JSON.stringify({ ...data, trainerId: '' }));
     return res;
   };
 
