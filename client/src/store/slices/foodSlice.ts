@@ -1,91 +1,54 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import useAuthorizationServices from 'src/services/useAuthorizationService';
-import { IUser } from 'src/types/IUser';
-import { IUserSignInData } from 'src/types/IUserSignInData';
-import { IUserSignUpData } from 'src/types/IUserSignUpData';
+import useEdamamService from 'src/services/useEdamamService';
+import { IRecipe } from 'src/types/IRecipe';
 
 interface FoodState {
-  loading: boolean;
+  foodLoading: boolean;
   alertMessage: string;
-  foodsData: 
-  favoriteFoods:
+  foodsData: IRecipe[] | null;
+  favoriteFoodsData: IRecipe[] | null;
 }
 
 const initialState:FoodState = {
-  loading: false;
+  foodLoading: false,
   alertMessage: '',
+  foodsData: null,
+  favoriteFoodsData: null,
 };
 
-export const signIn = createAsyncThunk(
-  'authorization/signIn',
-  async (data:IUserSignInData) => {
-    const { signInUser } = useAuthorizationServices();
-    const response = await signInUser(data);
+export const getFoods = createAsyncThunk(
+  'food/getFoods',
+  async (food:string) => {
+    const { getFoodsByValue } = useEdamamService();
+    const response = await getFoodsByValue(food);
     return response;
   },
 );
-export const signUp = createAsyncThunk(
-  'authorization/signUp',
-  async (data:IUserSignUpData) => {
-    const { signUpUser } = useAuthorizationServices();
-    const response = await signUpUser(data);
-    return response;
-  },
-);
-const AuthorizationSlice = createSlice({
-  name: 'authorization',
+
+const FoodSlice = createSlice({
+  name: 'food',
   initialState,
   reducers: {
-    openSignUpModal: (state) => {
-      state.signUpModal = true;
-      state.signInModal = false;
-    },
-    closeSignUpModal: (state) => {
-      state.signUpModal = false;
-    },
-    openSignInModal: (state) => {
-      state.signInModal = true;
-      state.signUpModal = false;
-    },
-    closeSignInModal: (state) => {
-      state.signInModal = false;
-    },
-    signOut: (state) => {
-      state.registeredUserData = null;
-      localStorage.removeItem('registeredUserData');
-    },
-    getRegisteredUserData: (state, action) => {
-      state.registeredUserData = action.payload;
-    },
 
   },
   extraReducers: (builder) => {
     builder
-      .addCase(signIn.fulfilled, (state, action) => {
-        state.registeredUserData = action.payload;
-        localStorage.setItem('registeredUserData', JSON.stringify(action.payload));
+      .addCase(getFoods.pending, (state) => {
+        state.foodLoading = true;
       })
-      .addCase(signIn.rejected, (state) => {
-        state.alertMessage = 'please enter correct data';
+      .addCase(getFoods.rejected, (state) => {
+        state.alertMessage = 'server page error please refresh or try again later';
       })
-      .addCase(signUp.fulfilled, (state) => {
-        state.alertMessage = 'registration completed successfully';
-      })
-      .addCase(signUp.rejected, (state) => {
-        state.alertMessage = 'please enter correct data';
+      .addCase(getFoods.fulfilled, (state, action) => {
+        state.foodLoading = false;
+        state.foodsData = action.payload;
       });
   },
 });
 
-const { actions, reducer } = AuthorizationSlice;
+const { reducer } = FoodSlice;
 
 export default reducer;
 
-export const {
-  openSignUpModal,
-  closeSignUpModal,
-  openSignInModal,
-  closeSignInModal,
-  signOut,
-  getRegisteredUserData,
-} = actions;
+// export const {
+// } = actions;
