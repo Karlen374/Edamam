@@ -5,12 +5,14 @@ import { IRecipe } from 'src/types/IRecipe';
 interface FoodState {
   foodLoading: boolean;
   alertMessage: string;
+  foodsForAutocomplete: string[];
   foodsData: IRecipe[] | null;
   favoriteFoodsData: IRecipe[] | null;
 }
 
 const initialState:FoodState = {
   foodLoading: false,
+  foodsForAutocomplete: [],
   alertMessage: '',
   foodsData: null,
   favoriteFoodsData: null,
@@ -21,6 +23,15 @@ export const getFoods = createAsyncThunk(
   async (food:string) => {
     const { getFoodsByValue } = useEdamamService();
     const response = await getFoodsByValue(food);
+    return response;
+  },
+);
+
+export const getFoodsForAutocomplete = createAsyncThunk(
+  'foods/getFoodsForAutocomplete',
+  async (food:string) => {
+    const { getFoodAutocomplete } = useEdamamService();
+    const response = await getFoodAutocomplete(food);
     return response;
   },
 );
@@ -42,6 +53,9 @@ const FoodSlice = createSlice({
       .addCase(getFoods.fulfilled, (state, action) => {
         state.foodLoading = false;
         state.foodsData = action.payload;
+      })
+      .addCase(getFoodsForAutocomplete.fulfilled, (state, action) => {
+        state.foodsForAutocomplete = action.payload;
       });
   },
 });

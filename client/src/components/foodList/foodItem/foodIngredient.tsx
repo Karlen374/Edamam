@@ -5,7 +5,7 @@ interface FoodIngredientProps{
 }
 const FoodIngredient = ({ ingredient }:FoodIngredientProps) => {
   return (
-    <Typography key={ingredient} variant="body2" color="text.secondary">
+    <Typography variant="body2" color="text.secondary">
       {ingredient}
     </Typography>
   );

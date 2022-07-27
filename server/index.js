@@ -14,6 +14,7 @@ app.use (
 )
 
 app.use(express.json())
+app.use(express.static('static'))
 app.use('/auth', authRouter)
 
 

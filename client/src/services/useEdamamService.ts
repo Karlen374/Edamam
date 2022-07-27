@@ -3,12 +3,18 @@ import { useHttp } from 'src/hooks/useHttp';
 
 const useEdamamService = () => {
   const _apiBase = 'https://api.edamam.com/';
-  const _apiId = 'app_id=a62789ea';
-  const _apiKey = 'app_key=007b4d8509034db5f42cde8cc8f8d0ee';
+  const _apiIdRecipe = 'app_id=a62789ea';
+  const _apiKeyRecipe = 'app_key=007b4d8509034db5f42cde8cc8f8d0ee';
+  const _apiIdFood = 'app_id=1eeb79c0';
+  const _apiKeyFood = 'app_key=0967caab91e1215b810f9fa39597f9f6';
   const { request } = useHttp();
 
+  const getFoodAutocomplete = async (value:string) => {
+    const res = await request(`${_apiBase}auto-complete?${_apiIdFood}&${_apiKeyFood}&q=${value}`);
+    return res.json;
+  };
   const getFoodsByValue = async (value:string) => {
-    const res = await request(`${_apiBase}api/recipes/v2?type=public&q=${value}&${_apiId}&${_apiKey}`);
+    const res = await request(`${_apiBase}api/recipes/v2?type=public&q=${value}&${_apiIdRecipe}&${_apiKeyRecipe}`);
     return res.hits.map((item:any) => {
       const food:IRecipe = item.recipe;
       const recipeId = item.recipe.uri.split('').reverse().join('').slice(0, 32)
@@ -25,13 +31,13 @@ const useEdamamService = () => {
         ingredientLines: food.ingredientLines,
         totalWeight: food.totalWeight,
         ingredients: food.ingredients,
-        cuisineTypes: food.cuisineType,
+        cuisineType: food.cuisineType,
         mealType: food.mealType,
       };
       return foodTransformObj;
     });
   };
 
-  return { getFoodsByValue };
+  return { getFoodsByValue, getFoodAutocomplete };
 };
 export default useEdamamService;
