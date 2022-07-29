@@ -1,12 +1,14 @@
 import Grid from '@mui/material/Grid';
 import { useTransition, animated } from 'react-spring';
-import { useAppSelector } from 'src/hooks/hooks';
 import { IRecipe } from 'src/types/IRecipe';
 import FoodItem from './foodItem/foodItem';
 import styles from './foodList.module.scss';
 
-const FoodList = () => {
-  const { foodsData } = useAppSelector((store) => store.food);
+interface FoodListProps{
+  foodsData:IRecipe[]
+}
+
+const FoodList = ({ foodsData }:FoodListProps) => {
   const transitions = useTransition(foodsData, {
     from: { opacity: 0 },
     enter: { opacity: 1 },

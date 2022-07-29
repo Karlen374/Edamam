@@ -28,7 +28,8 @@ class AuthController {
       }
       const hashPassword = bcrypt.hashSync(password,7)
       const userRole = await Role.findOne({value:"USER"})
-      const user = new User({ userName,userAge,userGender,userCity,email,password:hashPassword,roles:[userRole.value] })
+      const likedFoodsData =[]
+      const user = new User({ userName,userAge,userGender,userCity,email,password:hashPassword,roles:[userRole.value],likedFoodsData })
       await user.save()
       return res.json({message: "Пользователь успешно зарегистрирован"})
     } catch (e) {
@@ -56,6 +57,7 @@ class AuthController {
         userAge:user.userAge,
         email:user.email,
         role:user.roles[0],
+        likedFoodsData:user.likedFoodsData,
         token})
     } catch (e) {
       console.log(e);
@@ -80,6 +82,21 @@ class AuthController {
       res.json(users)
     } catch (e) {
       
+    }
+  }
+  async likeFood(req, res) {
+    try{
+      const recipe = req.body.recipe
+      const recipeId = recipe.recipeId
+      const userId= req.body.userId
+      const user = await User.findById(userId);
+      const check = user.likedFoodsData.map((item) => item.recipeId).includes(recipeId)
+      if (!check) user.likedFoodsData.push(recipe);
+      else user.likedFoodsData = user.likedFoodsData.filter(item => item.recipeId !== recipeId);
+      const updatedUser = await User.findByIdAndUpdate(user._id,user,{new:true})
+      return res.status(200).json(updatedUser)
+    } catch(e){
+      res.status(500).json(e)
     }
   }
 

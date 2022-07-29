@@ -13,6 +13,6 @@ authRouter.post('/signUp',[
 authRouter.post('/signIn', AuthController.login)
 authRouter.get('/users',RoleMiddleware(["ADMIN"]), AuthController.getUsers)
 authRouter.get('/users/:id',AuthController.getOneUser)
-
+authRouter.put('/likeFood',AuthController.likeFood)
 
 export default authRouter;

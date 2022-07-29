@@ -1,3 +1,5 @@
+import { IRecipe } from './IRecipe';
+
 export interface IUser {
   userName: string;
   userAge: number;
@@ -8,4 +10,5 @@ export interface IUser {
   trainerId: string;
   userRole: string;
   token: string;
+  likedFoodsData: IRecipe[];
 }

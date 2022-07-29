@@ -5,15 +5,15 @@ import { IRecipe } from 'src/types/IRecipe';
 interface FoodState {
   foodLoading: boolean;
   alertMessage: string;
-  foodsForAutocomplete: string[];
+  showLiked: boolean;
   foodsData: IRecipe[] | null;
   favoriteFoodsData: IRecipe[] | null;
 }
 
 const initialState:FoodState = {
   foodLoading: false,
-  foodsForAutocomplete: [],
   alertMessage: '',
+  showLiked: false,
   foodsData: null,
   favoriteFoodsData: null,
 };
@@ -27,20 +27,16 @@ export const getFoods = createAsyncThunk(
   },
 );
 
-export const getFoodsForAutocomplete = createAsyncThunk(
-  'foods/getFoodsForAutocomplete',
-  async (food:string) => {
-    const { getFoodAutocomplete } = useEdamamService();
-    const response = await getFoodAutocomplete(food);
-    return response;
-  },
-);
-
 const FoodSlice = createSlice({
   name: 'food',
   initialState,
   reducers: {
-
+    changeFoodLike: (state, action) => {
+      state.showLiked = action.payload;
+    },
+    getFavoriteFood: (state, action) => {
+      state.favoriteFoodsData = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -53,16 +49,15 @@ const FoodSlice = createSlice({
       .addCase(getFoods.fulfilled, (state, action) => {
         state.foodLoading = false;
         state.foodsData = action.payload;
-      })
-      .addCase(getFoodsForAutocomplete.fulfilled, (state, action) => {
-        state.foodsForAutocomplete = action.payload;
       });
   },
 });
 
-const { reducer } = FoodSlice;
+const { actions, reducer } = FoodSlice;
 
 export default reducer;
 
-// export const {
-// } = actions;
+export const {
+  changeFoodLike,
+  getFavoriteFood,
+} = actions;

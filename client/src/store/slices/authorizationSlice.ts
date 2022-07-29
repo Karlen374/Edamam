@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import useAuthorizationServices from 'src/services/useAuthorizationService';
+import { IRecipe } from 'src/types/IRecipe';
 import { IUser } from 'src/types/IUser';
 import { IUserSignInData } from 'src/types/IUserSignInData';
 import { IUserSignUpData } from 'src/types/IUserSignUpData';
@@ -31,6 +32,18 @@ export const signUp = createAsyncThunk(
   async (data:IUserSignUpData) => {
     const { signUpUser } = useAuthorizationServices();
     const response = await signUpUser(data);
+    return response;
+  },
+);
+interface foodLikeProps{
+  userId:string;
+  recipe:IRecipe;
+}
+export const changeLike = createAsyncThunk(
+  'authorization/changeLike',
+  async ({ userId, recipe }:foodLikeProps) => {
+    const { changeFoodLike } = useAuthorizationServices();
+    const response = await changeFoodLike(userId, recipe);
     return response;
   },
 );
@@ -75,6 +88,10 @@ const AuthorizationSlice = createSlice({
       })
       .addCase(signUp.rejected, (state) => {
         state.alertMessage = 'please enter correct data';
+      })
+      .addCase(changeLike.fulfilled, (state, action) => {
+        state.registeredUserData = action.payload;
+        localStorage.setItem('registeredUserData', JSON.stringify(action.payload));
       });
   },
 });

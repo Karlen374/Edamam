@@ -7,13 +7,19 @@ import FoodHeader from 'src/components/foodHeader/foodHeader';
 
 const MainPage = () => {
   const dispatch = useAppDispatch();
-  const { foodLoading, foodsData } = useAppSelector((store) => store.food);
+  const {
+    foodLoading,
+    favoriteFoodsData,
+    foodsData,
+    showLiked,
+  } = useAppSelector((store) => store.food);
   useEffect(() => {
     const registeredUserData = localStorage.getItem('registeredUserData');
     if (registeredUserData) dispatch(getRegisteredUserData(JSON.parse(registeredUserData)));
   }, []);
-  const foodListView = foodsData ? <FoodList /> : <h2>Search food</h2>;
-  const foodDataView = foodLoading ? <CircularProgress sx={{ marginTop: 10 }} /> : foodListView;
+  const foodListView = foodsData ? <FoodList foodsData={foodsData} /> : <h2>Search food</h2>;
+  const foodData = foodLoading ? <CircularProgress sx={{ marginTop: 10 }} /> : foodListView;
+  const foodDataView = (showLiked && favoriteFoodsData) ? <FoodList foodsData={favoriteFoodsData} /> : foodData;
   return (
     <>
       <FoodHeader />

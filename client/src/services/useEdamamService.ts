@@ -11,7 +11,7 @@ const useEdamamService = () => {
 
   const getFoodAutocomplete = async (value:string) => {
     const res = await request(`${_apiBase}auto-complete?${_apiIdFood}&${_apiKeyFood}&q=${value}`);
-    return res.json;
+    return res;
   };
   const getFoodsByValue = async (value:string) => {
     const res = await request(`${_apiBase}api/recipes/v2?type=public&q=${value}&${_apiIdRecipe}&${_apiKeyRecipe}`);
@@ -26,7 +26,7 @@ const useEdamamService = () => {
         calories: Math.floor(food.calories),
         label: food.label,
         image: food.image,
-        dietlabels: food.dietLabels,
+        dietLabels: food.dietLabels,
         healthLabels: food.healthLabels,
         ingredientLines: food.ingredientLines,
         totalWeight: food.totalWeight,

@@ -6,33 +6,49 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-// import Autocomplete from '@mui/material/Autocomplete';
-import { useAppDispatch } from 'src/hooks/hooks';
-import { getFoods, getFoodsForAutocomplete } from 'src/store/slices/foodSlice';
+import Autocomplete from '@mui/material/Autocomplete';
+import { useAppDispatch, useAppSelector } from 'src/hooks/hooks';
+import { changeFoodLike, getFavoriteFood, getFoods } from 'src/store/slices/foodSlice';
 import useDebounce from 'src/hooks/useDebounce';
+import useEdamamService from 'src/services/useEdamamService';
 import styles from './foodHeader.module.scss';
 
 const FoodHeader = () => {
   const [value, setValue] = useState<string>('');
-  const [liked, setLiked] = useState<boolean>(false);
+  const { showLiked } = useAppSelector((store) => store.food);
   const [recipe, setRecipe] = useState<string>('');
+  const [foodsForAutocomplete, setFoodsForAutocomplete] = useState<string[]>([]);
+  const { getFoodAutocomplete } = useEdamamService();
   const dispatch = useAppDispatch();
+
+  const getAutocomplete = async (food:string) => {
+    const response = await getFoodAutocomplete(food);
+    setFoodsForAutocomplete(response);
+  };
+  const debouncedAutocomplete = useDebounce(getAutocomplete, 400);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
   const changeRecipeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRecipe(e.target.value);
-    useDebounce(dispatch(getFoodsForAutocomplete(e.target.value)),300);
+    debouncedAutocomplete(e.target.value);
   };
+
   const searchFoods = () => {
     dispatch(getFoods(recipe));
   };
-  const likeIcon = liked ? <Favorite sx={{ color: red[900] }} /> : <FavoriteBorder sx={{ color: red[900] }} />;
+  const changeLikeButton = () => {
+    dispatch(changeFoodLike(!showLiked));
+    const registeredUserData = localStorage.getItem('registeredUserData');
+    if (registeredUserData) dispatch(getFavoriteFood(JSON.parse(registeredUserData).likedFoodsData));
+  };
+  const likeIcon = showLiked ? <Favorite sx={{ color: red[900] }} /> : <FavoriteBorder sx={{ color: red[900] }} />;
   return (
     <div className={styles.Food_Header}>
       <Grid container spacing={4}>
         <Grid item sm={6} lg={6} xs={12}>
-          {liked && (
+          {showLiked && (
           <TextField
             label="Search"
             id="outlined-basic"
@@ -41,22 +57,25 @@ const FoodHeader = () => {
             onChange={handleChange}
           />
           )}
-          {!liked && (
+          {!showLiked && (
           <div className={styles.Food_Header__Search}>
-            <TextField
-              id="outlined-basic"
-              label="Recipe"
-              variant="outlined"
-              size="small"
-              value={recipe}
-              onChange={changeRecipeValue}
-            />
-            {/* <Autocomplete
+            <Autocomplete
               id="free-solo-demo"
-              freeSolo
-              options={brands.map((option) => option.brand)}
-              renderInput={(params) => <TextField {...params} value={recipe} onChange={(e) => setRecipe(e.target.value)} label="Recipe" />}
-            /> */}
+              size="small"
+              options={foodsForAutocomplete}
+              loading
+              renderInput={
+                (params) => (
+                  <TextField
+                    {...params}
+                    sx={{ width: 220 }}
+                    value={recipe}
+                    onChange={changeRecipeValue}
+                    label="Recipe"
+                  />
+                )
+            }
+            />
             <Button
               onClick={searchFoods}
               className={styles.Food_Header__Button}
@@ -69,7 +88,12 @@ const FoodHeader = () => {
           )}
         </Grid>
         <Grid item sm={6} lg={6} xs={12}>
-          <IconButton onClick={() => setLiked(!liked)} color="primary" aria-label="upload picture" component="label">
+          <IconButton
+            onClick={changeLikeButton}
+            color="primary"
+            aria-label="upload picture"
+            component="label"
+          >
             {likeIcon}
           </IconButton>
         </Grid>

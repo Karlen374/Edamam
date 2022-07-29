@@ -1,9 +1,19 @@
-function useDebounce(fn: Function, delay:number) {
-  let timeout: ReturnType<typeof setTimeout>;
-  return function (this: any, ...args: any[]) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => fn.apply(this, args), delay);
-  };
+import { useCallback, useRef } from 'react';
+
+function useDebounce(callBack:Function, delay:number) {
+  const timer = useRef(null);
+
+  const debouncedCallback = useCallback((...args: any[]) => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+    // @ts-ignore
+    timer.current = setTimeout(() => {
+      callBack(...args);
+    }, delay);
+  }, [callBack, delay]);
+
+  return debouncedCallback;
 }
 
 export default useDebounce;

@@ -9,6 +9,7 @@ const User = new mongoose.Schema({
   email: {type: String, validate: [ isEmail, 'invalid email' ], unique: true, required: true},
   password: {type: String, required: true},
   roles: [{type: String, ref: 'Role'}],
+  likedFoodsData: {type: Object, required: true}
 })
 
 export default mongoose.model('User',User)

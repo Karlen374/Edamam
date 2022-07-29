@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from 'src/pages/MainPage';
 import UserProfilePage from 'src/pages/UserProfilePage';
+import FoodInfoPage from 'src/pages/FoodInfoPage';
 import AppHeader from '../AppHeader/AppHeader';
 import styles from './App.module.scss';
 
@@ -13,6 +14,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/userProfile" element={<UserProfilePage />} />
+          <Route path="/:id" element={<FoodInfoPage />} />
         </Routes>
       </div>
     </Router>
