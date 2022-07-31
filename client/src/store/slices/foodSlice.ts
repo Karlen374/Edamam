@@ -8,6 +8,7 @@ interface FoodState {
   showLiked: boolean;
   foodsData: IRecipe[] | null;
   favoriteFoodsData: IRecipe[] | null;
+  currentFoodData: IRecipe | null;
 }
 
 const initialState:FoodState = {
@@ -16,6 +17,7 @@ const initialState:FoodState = {
   showLiked: false,
   foodsData: null,
   favoriteFoodsData: null,
+  currentFoodData: null,
 };
 
 export const getFoods = createAsyncThunk(
@@ -26,7 +28,14 @@ export const getFoods = createAsyncThunk(
     return response;
   },
 );
-
+export const getCurrentFoodById = createAsyncThunk(
+  'food/getCurrentFoodById',
+  async (id:string) => {
+    const { getFoodById } = useEdamamService();
+    const response = await getFoodById(id);
+    return response;
+  },
+);
 const FoodSlice = createSlice({
   name: 'food',
   initialState,
@@ -49,6 +58,13 @@ const FoodSlice = createSlice({
       .addCase(getFoods.fulfilled, (state, action) => {
         state.foodLoading = false;
         state.foodsData = action.payload;
+      })
+      .addCase(getCurrentFoodById.pending, (state) => {
+        state.foodLoading = true;
+      })
+      .addCase(getCurrentFoodById.fulfilled, (state, action) => {
+        state.foodLoading = false;
+        state.currentFoodData = action.payload;
       });
   },
 });

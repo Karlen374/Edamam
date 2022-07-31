@@ -37,7 +37,29 @@ const useEdamamService = () => {
       return foodTransformObj;
     });
   };
+  const getFoodById = async (id:string) => {
+    const res = await request(`${_apiBase}api/recipes/v2/${id}?type=public&${_apiIdRecipe}&${_apiKeyRecipe}`);
+    const food:IRecipe = res.recipe;
+    const recipeId = res.recipe.uri.split('').reverse().join('').slice(0, 32)
+      .split('')
+      .reverse()
+      .join('');
+    const foodTransformObj = {
+      recipeId,
+      calories: Math.floor(food.calories),
+      label: food.label,
+      image: food.image,
+      dietLabels: food.dietLabels,
+      healthLabels: food.healthLabels,
+      ingredientLines: food.ingredientLines,
+      totalWeight: food.totalWeight,
+      ingredients: food.ingredients,
+      cuisineType: food.cuisineType,
+      mealType: food.mealType,
+    };
+    return foodTransformObj;
+  };
 
-  return { getFoodsByValue, getFoodAutocomplete };
+  return { getFoodsByValue, getFoodAutocomplete, getFoodById };
 };
 export default useEdamamService;

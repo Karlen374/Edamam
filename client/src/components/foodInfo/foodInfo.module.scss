@@ -1,0 +1,40 @@
+.Food__Info{
+  border:1px solid black;
+  margin:20px;
+  border-radius: 10px;
+  &_Nutrition{
+    display:flex;
+    justify-content: space-around;
+    max-width: 500px;
+    p{
+      margin-right: 10px;
+      font-size: 12px;
+    }
+  }
+  &_Header{
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  &_Carousel{
+    display:flex;
+    padding:50px 20px;
+    justify-content: center;
+    text-align: center;
+  }
+  &_SubHeader{
+    margin: 0;
+  }
+  &_Input{
+    width:40px;
+    height:40px;
+  }
+  &_Output{
+    width: 48px;
+    height: 44px;
+    background-color: #fff;
+    border: none;
+    font-size: 18px;
+    color: black;
+  }
+}

@@ -78,7 +78,7 @@ const FoodItem = ({ foodData }:FoodItemProps) => {
           horizontal: 'left',
         }}
       >
-        <Link to={`/${foodData?.recipeId}`}>
+        <Link className={styles.Food__Item_Link} to={`/${foodData?.recipeId}`}>
           <MenuItem onClick={handleClose}>More</MenuItem>
         </Link>
       </Menu>
