@@ -4,6 +4,10 @@
   a{
     text-decoration: none;
   }
+  &_NavButtons{
+    display:flex;
+    justify-content: space-around;
+  }
   &_Chip:hover{
     color:rgb(51, 105, 51);
     background-color: #fff;
@@ -12,9 +16,6 @@
     & path{
       color:rgb(51, 105, 51)
     }
-  }
-  &_Button{
-    color:#fff;
   }
   &_Error{
     margin: 10px;

@@ -14,7 +14,7 @@ const AuthorizationButton = () => {
   const { registeredUserData } = useAppSelector((store) => store.authorization);
   const content = registeredUserData
     ? (
-      <>
+      <div>
         <Link to="/userProfile">
           <Chip
             className={styles.AppHeader_Chip}
@@ -28,26 +28,33 @@ const AuthorizationButton = () => {
           variant="text"
           className={styles.AppHeader_Button}
           onClick={() => dispatch(signOut())}
+          sx={{ color: grey[50] }}
         >
           <LogoutIcon />
         </Button>
-      </>
+      </div>
     )
     : (
       <Button
         variant="text"
         className={styles.AppHeader_Button}
         onClick={() => dispatch(openSignUpModal())}
+        sx={{ color: grey[50] }}
       >
         Sign Up
       </Button>
     );
   return (
     <Grid item lg={6} md={6} sm={6} xs={12}>
-      { content }
-      <Link to="/">
-        <Button variant="contained" color="success">Home Page</Button>
-      </Link>
+      <div className={styles.AppHeader_NavButtons}>
+        <Link to="/">
+          <Button variant="contained" color="success">Home Page</Button>
+        </Link>
+        { content }
+        <Link to="/WeatherPage">
+          <Button variant="contained" color="success">Weather Page</Button>
+        </Link>
+      </div>
     </Grid>
   );
 };

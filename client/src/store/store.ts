@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import food from 'src/store/slices/foodSlice';
 import authorization from 'src/store/slices/authorizationSlice';
+import weather from 'src/store/slices/weatherSlice';
 
 export const store = configureStore({
   reducer: {
     authorization,
     food,
+    weather,
   },
 });
 
