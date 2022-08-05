@@ -28,6 +28,9 @@ const WeatherSlice = createSlice({
   name: 'weather',
   initialState,
   reducers: {
+    clearCitiesWeatherData: (state) => {
+      state.citiesWeatherData = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -35,15 +38,15 @@ const WeatherSlice = createSlice({
         state.weatherLoading = true;
       })
       .addCase(getCityWeatherData.fulfilled, (state, action) => {
-        console.log('action.payload=', action.payload);
         state.citiesWeatherData = [...state.citiesWeatherData, action.payload];
       });
   },
 });
 
-const { reducer } = WeatherSlice;
+const { actions, reducer } = WeatherSlice;
 
 export default reducer;
 
-// export const {
-// } = actions;
+export const {
+  clearCitiesWeatherData,
+} = actions;

@@ -22,12 +22,19 @@ const useWeatherService = () => {
       minTemp_c: res.forecast.forecastday[0].day.mintemp_c,
     };
   };
-
+  const _transformAutocomplete = (res:any) => {
+    return res.map((item:any) => item.name);
+  };
   const getWeatherByCity = async (city:string, days = 1) => {
     const res = await request(`${_apiBase}forecast.json?key=${_apiKey}&q=${city}&days=${days}&aqi=no&alerts=no`);
     return _transformWeatherInfo(res);
   };
 
-  return { getWeatherByCity };
+  const getCityAutocomplete = async (city:string) => {
+    const res = await request(`${_apiBase}search.json?key=${_apiKey}&q=${city}`);
+    return _transformAutocomplete(res);
+  };
+
+  return { getWeatherByCity, getCityAutocomplete };
 };
 export default useWeatherService;

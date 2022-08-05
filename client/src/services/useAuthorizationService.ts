@@ -20,8 +20,16 @@ const useAuthorizationServices = () => {
     const res = await request(`${_apiBase}/likeFood`, 'PUT', JSON.stringify({ recipe, userId }));
     return res;
   };
-
-  return { signInUser, signUpUser, changeFoodLike };
+  const changeFavoriteCities = async (userId:string, city:string) => {
+    const res = await request(`${_apiBase}/favoriteCity`, 'PUT', JSON.stringify({ city, userId }));
+    return res;
+  };
+  return {
+    signInUser,
+    signUpUser,
+    changeFoodLike,
+    changeFavoriteCities,
+  };
 };
 
 export default useAuthorizationServices;

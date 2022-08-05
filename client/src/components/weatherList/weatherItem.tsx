@@ -9,19 +9,34 @@ import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 import SouthIcon from '@mui/icons-material/South';
 import NorthIcon from '@mui/icons-material/North';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
+import { useAppDispatch, useAppSelector } from 'src/hooks/hooks';
+import { yellow } from '@mui/material/colors';
+import { changeFavorite } from 'src/store/slices/authorizationSlice';
 // import styles from './weatherList.module.scss';
 
 interface WeatherItemProps {
   weatherInfo: IWeatherInfo;
 }
 const WeatherItem = ({ weatherInfo }: WeatherItemProps) => {
-  console.log('weatherInfo= ', weatherInfo);
+  const { registeredUserData } = useAppSelector((store) => store.authorization);
+  const dispatch = useAppDispatch();
+  const favoriteIcon = registeredUserData?.favoriteCities?.map((item) => item.replace(/[-, ' ']/g, '').toUpperCase())
+    .includes(weatherInfo.name.replace(/[-, ' ']/g, '').toUpperCase())
+    ? <StarIcon sx={{ color: yellow[700] }} /> : <StarBorderIcon sx={{ color: yellow[700] }} />;
+
+  const changeFavoriteStatus = () => {
+    if (registeredUserData && weatherInfo) {
+      dispatch(changeFavorite({ userId: registeredUserData?._id, city: weatherInfo.name }));
+    }
+  };
   return (
     <Card
       sx={{
         display: 'inline-block', width: 200, margin: 1,
       }}
-      key={weatherInfo.localTime}
+      key={weatherInfo.localTime + weatherInfo.name}
     >
       <CardHeader
         title={weatherInfo.name}
@@ -52,6 +67,9 @@ const WeatherItem = ({ weatherInfo }: WeatherItemProps) => {
         display: 'flex', alignItems: 'center', pl: 1, pb: 1, marginTop: 3,
       }}
       >
+        <IconButton onClick={changeFavoriteStatus} aria-label="add to favorites">
+          {favoriteIcon}
+        </IconButton>
         <NorthIcon />
         {weatherInfo.maxTemp_c}
         °

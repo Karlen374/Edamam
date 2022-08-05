@@ -28,8 +28,9 @@ class AuthController {
       }
       const hashPassword = bcrypt.hashSync(password,7)
       const userRole = await Role.findOne({value:"USER"})
-      const likedFoodsData =[]
-      const user = new User({ userName,userAge,userGender,userCity,email,password:hashPassword,roles:[userRole.value],likedFoodsData })
+      const likedFoodsData = []
+      const favoriteCities = [`${userCity}`]
+      const user = new User({ userName,userAge,userGender,userCity,email,password:hashPassword,roles:[userRole.value],likedFoodsData,favoriteCities })
       await user.save()
       return res.json({message: "Пользователь успешно зарегистрирован"})
     } catch (e) {
@@ -58,6 +59,7 @@ class AuthController {
         email:user.email,
         role:user.roles[0],
         likedFoodsData:user.likedFoodsData,
+        favoriteCities:user.favoriteCities,
         token})
     } catch (e) {
       console.log(e);
@@ -93,6 +95,20 @@ class AuthController {
       const check = user.likedFoodsData.map((item) => item.recipeId).includes(recipeId)
       if (!check) user.likedFoodsData.push(recipe);
       else user.likedFoodsData = user.likedFoodsData.filter(item => item.recipeId !== recipeId);
+      const updatedUser = await User.findByIdAndUpdate(user._id,user,{new:true})
+      return res.status(200).json(updatedUser)
+    } catch(e){
+      res.status(500).json(e)
+    }
+  }
+  async changeFavoriteCity(req, res) {
+    try{
+      const city = req.body.city
+      const userId = req.body.userId
+      const user = await User.findById(userId);
+      const check = user.favoriteCities.includes(city);
+      if (!check) user.favoriteCities.push(city);
+      else user.favoriteCities = user.favoriteCities.filter(item => item !== city);
       const updatedUser = await User.findByIdAndUpdate(user._id,user,{new:true})
       return res.status(200).json(updatedUser)
     } catch(e){

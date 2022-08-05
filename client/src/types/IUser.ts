@@ -11,4 +11,5 @@ export interface IUser {
   userRole: string;
   token: string;
   likedFoodsData: IRecipe[];
+  favoriteCities: string[];
 }

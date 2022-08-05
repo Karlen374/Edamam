@@ -47,6 +47,18 @@ export const changeLike = createAsyncThunk(
     return response;
   },
 );
+interface favoriteCityProps{
+  userId:string;
+  city:string;
+}
+export const changeFavorite = createAsyncThunk(
+  'authorization/changeFavorite',
+  async ({ userId, city }:favoriteCityProps) => {
+    const { changeFavoriteCities } = useAuthorizationServices();
+    const response = await changeFavoriteCities(userId, city);
+    return response;
+  },
+);
 const AuthorizationSlice = createSlice({
   name: 'authorization',
   initialState,
@@ -90,6 +102,10 @@ const AuthorizationSlice = createSlice({
         state.alertMessage = 'please enter correct data';
       })
       .addCase(changeLike.fulfilled, (state, action) => {
+        state.registeredUserData = action.payload;
+        localStorage.setItem('registeredUserData', JSON.stringify(action.payload));
+      })
+      .addCase(changeFavorite.fulfilled, (state, action) => {
         state.registeredUserData = action.payload;
         localStorage.setItem('registeredUserData', JSON.stringify(action.payload));
       });
