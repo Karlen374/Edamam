@@ -22,6 +22,34 @@ const useWeatherService = () => {
       minTemp_c: res.forecast.forecastday[0].day.mintemp_c,
     };
   };
+  const _transformDetailWeatherInfo = (res:any) => {
+    return {
+      country: res.location.country,
+      name: res.location.name,
+      current_date: res.location.localtime,
+      current_temp: res.current.temp_c,
+      current_feelsLike: res.current.feelslike_c,
+      current_condition: {
+        text: res.current.condition.text,
+        icon: res.current.condition.icon,
+        code: res.current.condition.code,
+      },
+      forecast: res.forecast.forecastday.map((item: any) => {
+        return {
+          sunrise: item.astro.sunrise,
+          sunset: item.astro.sunset,
+          date: item.date,
+          maxTemp: item.day.maxtemp_c,
+          minTemp: item.day.mintemp_c,
+          condition: {
+            text: item.day.condition.text,
+            icon: item.day.condition.icon,
+            code: item.day.condition.code,
+          },
+        };
+      }),
+    };
+  };
   const _transformAutocomplete = (res:any) => {
     return res.map((item:any) => item.name);
   };
@@ -29,12 +57,15 @@ const useWeatherService = () => {
     const res = await request(`${_apiBase}forecast.json?key=${_apiKey}&q=${city}&days=${days}&aqi=no&alerts=no`);
     return _transformWeatherInfo(res);
   };
-
+  const getCurrentCityWeather = async (city:string, days = 3) => {
+    const res = await request(`${_apiBase}forecast.json?key=${_apiKey}&q=${city}&days=${days}&aqi=no&alerts=no`);
+    return _transformDetailWeatherInfo(res);
+  };
   const getCityAutocomplete = async (city:string) => {
     const res = await request(`${_apiBase}search.json?key=${_apiKey}&q=${city}`);
     return _transformAutocomplete(res);
   };
 
-  return { getWeatherByCity, getCityAutocomplete };
+  return { getWeatherByCity, getCityAutocomplete, getCurrentCityWeather };
 };
 export default useWeatherService;

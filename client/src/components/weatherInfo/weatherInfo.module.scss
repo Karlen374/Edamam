@@ -1,0 +1,7 @@
+.weatherInfo{
+  border:1px solid black;
+  &__Header{
+    display:flex;
+    justify-content: center;
+  }
+}
