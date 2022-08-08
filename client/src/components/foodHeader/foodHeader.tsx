@@ -71,7 +71,7 @@ const FoodHeader = () => {
                     sx={{ width: 220 }}
                     value={recipe}
                     onChange={changeRecipeValue}
-                    label="Recipe"
+                    label={'For example "pizza"'}
                   />
                 )
             }

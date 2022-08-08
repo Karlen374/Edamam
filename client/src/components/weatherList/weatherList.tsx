@@ -3,7 +3,6 @@ import WeatherItem from './weatherItem';
 
 const WeatherList = () => {
   const { citiesWeatherData } = useAppSelector((store) => store.weather);
-  console.log('render', citiesWeatherData);
   return (
     <>
       { citiesWeatherData.map((item) => {

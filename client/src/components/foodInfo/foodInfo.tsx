@@ -67,7 +67,6 @@ const FoodInfo = () => {
       setDailyValue(currentDailyValue);
     }
   };
-  console.log(currentFoodData);
   if (!currentFoodData) {
     return (
       <CircularProgress />

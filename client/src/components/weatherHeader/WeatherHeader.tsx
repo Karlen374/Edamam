@@ -43,7 +43,7 @@ const WeatherHeader = () => {
                     sx={{ width: 220 }}
                     value={city}
                     onChange={changeSearchCity}
-                    label="Search"
+                    label={'For example "London"'}
                   />
                 )
             }
