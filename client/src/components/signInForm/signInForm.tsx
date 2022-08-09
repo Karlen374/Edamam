@@ -28,13 +28,13 @@ return (
       <Grid item lg={12} md={12} sm={12} xs={12}>
         <TextField
           id="outlined-name"
-          label="адрес эл. почты"
+          label="E-mail address"
           type="email"
           {...register('email', {
-            required: 'Это поле обязательное',
+            required: 'This field is required',
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: 'Пожалуйста Введите корректный E-mail! ',
+              message: 'Please Enter a valid E-mail! ',
             },
           })}
         />
@@ -45,14 +45,18 @@ return (
       <Grid item lg={12} md={12} sm={12} xs={12}>
         <TextField
           id="outlined-password-input"
-          label="Пароль"
+          label="Password"
           type="password"
           autoComplete="current-password"
           {...register('password', {
-            required: 'Это поле обязательное',
+            required: 'This field is required',
             minLength: {
               value: 3,
-              message: 'Пароль слишком короткий',
+              message: 'Password is too short',
+            },
+            pattern: {
+              value: /^[A-Za-z]+$/i,
+              message: 'use characters a-Z',
             },
           })}
         />

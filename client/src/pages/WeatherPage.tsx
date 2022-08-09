@@ -15,6 +15,7 @@ const WeatherPage = () => {
       JSON.parse(registeredUserData).favoriteCities.map((item:string) => {
         return dispatch(getCityWeatherData(item));
       });
+      dispatch(getCityWeatherData(JSON.parse(registeredUserData).userCity));
     }
   }, []);
   return (

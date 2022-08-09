@@ -18,7 +18,7 @@ const WeatherGraphic = ({ hourlyInfo, weatherDegree }:IWeatherInfoProps) => {
   if (weatherDegree === 'F') {
     hourlyInfo = hourlyInfo.map((item) => {
       return {
-        temp: (item.temp * 9) / 5 + 30,
+        temp: (item.temp * 9) / 5 + 32,
         time: item.time,
       };
     });

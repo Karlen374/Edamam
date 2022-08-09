@@ -13,11 +13,10 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import Tooltip from '@mui/material/Tooltip';
 import { useAppDispatch, useAppSelector } from 'src/hooks/hooks';
-import { yellow } from '@mui/material/colors';
+import { yellow, red } from '@mui/material/colors';
 import cryptoRandomString from 'crypto-random-string';
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import { changeFavorite } from 'src/store/slices/authorizationSlice';
-// import styles from './weatherList.module.scss';
 
 interface WeatherItemProps {
   weatherInfo: IWeatherInfo;
@@ -28,6 +27,8 @@ const WeatherItem = ({ weatherInfo }: WeatherItemProps) => {
   const favoriteIcon = registeredUserData?.favoriteCities?.map((item) => item.replace(/[-, ' ']/g, '').toUpperCase())
     .includes(weatherInfo.name.replace(/[-, ' ']/g, '').toUpperCase())
     ? <StarIcon sx={{ color: yellow[700] }} /> : <StarBorderIcon sx={{ color: yellow[700] }} />;
+  const userCityFavoriteIcon = registeredUserData?.userCity.replace(/[-, ' ']/g, '').toUpperCase()
+    .includes(weatherInfo.name.replace(/[-, ' ']/g, '').toUpperCase());
   const changeFavoriteStatus = () => {
     if (registeredUserData && weatherInfo) {
       dispatch(changeFavorite({ userId: registeredUserData?._id, city: weatherInfo.name }));
@@ -56,7 +57,7 @@ const WeatherItem = ({ weatherInfo }: WeatherItemProps) => {
           <Avatar
             alt="Weather Photo"
             src={weatherInfo.condition.icon}
-            sx={{ width: 56, height: 56 }}
+            sx={{ width: 60, height: 60 }}
           />
         )}
       />
@@ -73,9 +74,21 @@ const WeatherItem = ({ weatherInfo }: WeatherItemProps) => {
         display: 'flex', alignItems: 'center', pl: 1, pb: 1, marginTop: 3,
       }}
       >
+        {' '}
+        {(registeredUserData && !userCityFavoriteIcon)
+        && (
         <IconButton onClick={changeFavoriteStatus} aria-label="add to favorites">
           {favoriteIcon}
         </IconButton>
+        )}
+        {(registeredUserData && userCityFavoriteIcon)
+        && (
+        <Tooltip title="This is your city, you cannot add or remove from favorites" placement="left-start">
+          <IconButton aria-label="add to favorites">
+            <StarIcon sx={{ color: red[700] }} />
+          </IconButton>
+        </Tooltip>
+        )}
         <NorthIcon />
         {weatherInfo.maxTemp_c}
         °

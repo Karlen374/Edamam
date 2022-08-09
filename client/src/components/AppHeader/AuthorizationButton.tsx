@@ -48,7 +48,7 @@ const AuthorizationButton = () => {
     <Grid item lg={6} md={6} sm={6} xs={12}>
       <div className={styles.AppHeader_NavButtons}>
         <Link to="/">
-          <Button variant="contained" color="success">Home Page</Button>
+          <Button variant="contained" color="success">Recipe Page</Button>
         </Link>
         { content }
         <Link to="/WeatherPage">

@@ -6,7 +6,6 @@ import { red } from '@mui/material/colors';
 import Tooltip from '@mui/material/Tooltip';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Carousel } from 'react-carousel-minimal';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import { IRecipe } from 'src/types/IRecipe';
@@ -18,18 +17,11 @@ import carouselDataCounter from 'src/helpers/carouselDataCounter';
 import Grid from '@mui/material/Grid';
 import styles from './foodInfo.module.scss';
 import FoodInfoTable from './foodInfoTable';
+import FoodInfoCarousel from './foodInfoCarousel';
 
 const FoodInfo = () => {
   const { foodId } = useParams();
   const dispatch = useAppDispatch();
-  const captionStyle = {
-    fontSize: '2em',
-    fontWeight: 'bold',
-  };
-  const slideNumberStyle = {
-    fontSize: '20px',
-    fontWeight: 'bold',
-  };
   const { currentFoodData } = useAppSelector((store) => store.food);
   const { registeredUserData } = useAppSelector((store) => store.authorization);
   const [dailyValue, setDailyValue] = useState<number>(0);
@@ -57,14 +49,16 @@ const FoodInfo = () => {
     }
   };
   const changeDailyValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setServing(Number(e.target.value));
-    if (registeredUserData && currentFoodData) {
-      const currentDailyValue = CalorieCounter(
-        registeredUserData?.userAge,
-        registeredUserData?.userGender,
-        currentFoodData.calories / Number(e.target.value),
-      );
-      setDailyValue(currentDailyValue);
+    if (Number(e.target.value) > 0) {
+      setServing(Number(e.target.value));
+      if (registeredUserData && currentFoodData) {
+        const currentDailyValue = CalorieCounter(
+          registeredUserData?.userAge,
+          registeredUserData?.userGender,
+          currentFoodData.calories / Number(e.target.value),
+        );
+        setDailyValue(currentDailyValue);
+      }
     }
   };
   if (!currentFoodData) {
@@ -77,9 +71,12 @@ const FoodInfo = () => {
     <div className={styles.Food__Info}>
       <h2>
         {currentFoodData?.label}
+        {registeredUserData
+        && (
         <IconButton onClick={changeFoodLike} aria-label="add to favorites">
           {likeIcon}
         </IconButton>
+        )}
       </h2>
 
       <div className={styles.Food__Info_Header}>
@@ -135,23 +132,7 @@ const FoodInfo = () => {
       <div className={styles.Food__Info_Carousel}>
         <Grid container>
           <Grid item sm={6} lg={6} xs={12}>
-            <Carousel
-              data={carouselDataArray}
-              time={5000}
-              width="450px"
-              height="280px"
-              captionStyle={captionStyle}
-              radius="20px"
-              slideNumber
-              slideNumberStyle={slideNumberStyle}
-              captionPosition="bottom"
-              automatic
-              dots
-              pauseIconColor="black"
-              pauseIconSize="60px"
-              slideBackgroundColor="black"
-              slideImageFit="cover"
-            />
+            <FoodInfoCarousel carouselDataArray={carouselDataArray} />
           </Grid>
           <Grid item sm={6} lg={6} xs={12}>
             <FoodInfoTable ingredients={currentFoodData.ingredients} />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { red } from '@mui/material/colors';
 import IconButton from '@mui/material/IconButton';
@@ -14,22 +14,21 @@ import useEdamamService from 'src/services/useEdamamService';
 import styles from './foodHeader.module.scss';
 
 const FoodHeader = () => {
-  const [value, setValue] = useState<string>('');
   const { showLiked } = useAppSelector((store) => store.food);
   const [recipe, setRecipe] = useState<string>('');
   const [foodsForAutocomplete, setFoodsForAutocomplete] = useState<string[]>([]);
   const { getFoodAutocomplete } = useEdamamService();
+  const { registeredUserData } = useAppSelector((store) => store.authorization);
   const dispatch = useAppDispatch();
-
+  useEffect(() => {
+    dispatch(getFoods('pizza'));
+  }, []);
   const getAutocomplete = async (food:string) => {
     const response = await getFoodAutocomplete(food);
     setFoodsForAutocomplete(response);
   };
   const debouncedAutocomplete = useDebounce(getAutocomplete, 400);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
   const changeRecipeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRecipe(e.target.value);
     debouncedAutocomplete(e.target.value);
@@ -40,23 +39,14 @@ const FoodHeader = () => {
   };
   const changeLikeButton = () => {
     dispatch(changeFoodLike(!showLiked));
-    const registeredUserData = localStorage.getItem('registeredUserData');
-    if (registeredUserData) dispatch(getFavoriteFood(JSON.parse(registeredUserData).likedFoodsData));
+    const userData = localStorage.getItem('registeredUserData');
+    if (userData) dispatch(getFavoriteFood(JSON.parse(userData).likedFoodsData));
   };
   const likeIcon = showLiked ? <Favorite sx={{ color: red[900] }} /> : <FavoriteBorder sx={{ color: red[900] }} />;
   return (
     <div className={styles.Food_Header}>
       <Grid container spacing={4}>
         <Grid item sm={6} lg={6} xs={12}>
-          {showLiked && (
-          <TextField
-            label="Search"
-            id="outlined-basic"
-            size="small"
-            value={value}
-            onChange={handleChange}
-          />
-          )}
           {!showLiked && (
           <div className={styles.Food_Header__Search}>
             <Autocomplete
@@ -87,6 +77,8 @@ const FoodHeader = () => {
           </div>
           )}
         </Grid>
+        { registeredUserData
+        && (
         <Grid item sm={6} lg={6} xs={12}>
           <IconButton
             onClick={changeLikeButton}
@@ -97,6 +89,7 @@ const FoodHeader = () => {
             {likeIcon}
           </IconButton>
         </Grid>
+        )}
       </Grid>
     </div>
   );

@@ -70,7 +70,6 @@ const useWeatherService = () => {
   };
   const getCurrentCityWeather = async (city:string, days = 3) => {
     const res = await request(`${_apiBase}forecast.json?key=${_apiKey}&q=${city}&days=${days}&aqi=no&alerts=no`);
-    console.log(res);
     return _transformDetailWeatherInfo(res);
   };
   const getCityAutocomplete = async (city:string) => {

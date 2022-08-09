@@ -29,7 +29,7 @@ class AuthController {
       const hashPassword = bcrypt.hashSync(password,7)
       const userRole = await Role.findOne({value:"USER"})
       const likedFoodsData = []
-      const favoriteCities = [`${userCity}`]
+      const favoriteCities = []
       const user = new User({ userName,userAge,userGender,userCity,email,password:hashPassword,roles:[userRole.value],likedFoodsData,favoriteCities })
       await user.save()
       return res.json({message: "Пользователь успешно зарегистрирован"})

@@ -41,10 +41,14 @@ const SignUpForm = () => {
             type="text"
             {...register('userName', {
               required: 'This field is required',
+              pattern: {
+                value: /^[A-Za-z]+$/i,
+                message: 'use characters a-Z',
+              },
             })}
           />
           {errors.userName?.message && (
-            <div className={styles.SignUp_Form__ErrorMessage}>error</div>
+            <div className={styles.SignUp_Form__ErrorMessage}>{errors.userName?.message}</div>
           )}
         </Grid>
         <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -74,6 +78,7 @@ const SignUpForm = () => {
               labelId="demo-select-small"
               id="demo-select-small"
               label="Gender"
+              defaultValue=""
               {...register('userGender', {
                 required: 'This field is required',
               })}
@@ -92,6 +97,10 @@ const SignUpForm = () => {
             type="text"
             {...register('userCity', {
               required: 'This field is required',
+              pattern: {
+                value: /^[A-Za-z]+$/i,
+                message: 'use characters a-Z',
+              },
             })}
           />
           {errors.userCity?.message && (
@@ -126,6 +135,10 @@ const SignUpForm = () => {
               minLength: {
                 value: 3,
                 message: 'Password is too short',
+              },
+              pattern: {
+                value: /^[A-Za-z]+$/i,
+                message: 'use characters a-Z',
               },
             })}
           />

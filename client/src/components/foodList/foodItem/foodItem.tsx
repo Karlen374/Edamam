@@ -92,11 +92,14 @@ const FoodItem = ({ foodData }:FoodItemProps) => {
         <h3>Ingredients:</h3>
         {foodData?.ingredientLines.map((item) => <FoodIngredient key={item} ingredient={item} />)}
       </CardContent>
+      {registeredUserData
+      && (
       <CardActions disableSpacing>
         <IconButton onClick={changeFoodLike} aria-label="add to favorites">
           {likeIcon}
         </IconButton>
       </CardActions>
+      )}
     </Card>
   );
 };

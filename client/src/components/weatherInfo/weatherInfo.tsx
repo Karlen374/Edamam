@@ -22,7 +22,6 @@ const WeatherInfo = () => {
       setWeatherInfo(data);
     }
   };
-  console.log('weatherINfo=', weatherInfo);
   useEffect(() => {
     getWeather();
   }, []);
